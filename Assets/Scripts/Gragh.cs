@@ -19,20 +19,20 @@ public class Gragh : MonoBehaviour
     {
         float step = 2f / resolution;
         var scale = Vector3.one * step;
-        var position = Vector3.zero;
+        //var position = Vector3.zero;
         points = new Transform[resolution * resolution];
-        for(int i=0,x=0,z=0; i< points.Length; i++,x++) { 
-            if (x== resolution)
+        for(int i=0; i< points.Length; i++) { 
+            /*if (x== resolution)
             {
                 x = 0;
                 z += 1;
-            }
+            }*/
             Transform point=points[i] = Instantiate(pointPrefab);
             
-            position.x = (x + 0.5f)  *step - 1f;
-            position.z = (z + 0.5f) * step - 1f;
+           // position.x = (x + 0.5f)  *step - 1f;
+           // position.z = (z + 0.5f) * step - 1f;
             //position.y = position.x * position.x * position.x; 被Update取代
-            point.localPosition = position;
+            //point.localPosition = position;
             point.localScale = scale;
             point.SetParent(transform,false);
         }
@@ -40,14 +40,24 @@ public class Gragh : MonoBehaviour
     }
     void Update()
     {
-        FunctionLibrary.Function f = FunctionLibrary.GetFunction(function); 
-        for (int i = 0; i < points.Length; i++)
+        FunctionLibrary.Function f = FunctionLibrary.GetFunction(function);
+        float time = Time.time;//Time.time 的值對於循環的每次迭代都是相同的
+        float step = 2f / resolution;
+        float v =  0.5f * step - 1f;
+        for (int i = 0,x=0,z=0; i < points.Length; i++,x++)
         {
-            float time = Time.time;//Time.time 的值對於循環的每次迭代都是相同的
-            Transform point = points[i];
-            Vector3 position = point.localPosition;
-            position.y = f( position.x , position.z , time);
-            point.localPosition = position;
+            if(x == resolution)
+            {
+                x = 0;
+                z +=1;
+                v = (z + 0.5f) * step - 1f;
+            }
+            /* Transform point = points[i];
+             Vector3 position = point.localPosition;
+             position.y = f( position.x , position.z , time);
+             point.localPosition = position;*/
+            float u = (x + 0.5f) * step - 1f;            
+            points[i].localPosition = f(u, v, time);
         }
     }
 }
