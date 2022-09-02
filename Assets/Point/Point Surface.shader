@@ -15,7 +15,7 @@ Shader "Gragh/Point Surface"{
 		float _Smoothness;
 
 		void ConfigureSurface (Input input, inout SurfaceOutputStandard surface) {
-			surface.Albedo.rg = saturate(input.worldPos.xy * 0.5 + 0.5);//反照率，它是衡量有多少光被表面漫反射的量度。
+			surface.Albedo = saturate(input.worldPos * 0.5 + 0.5);//反照率，它是衡量有多少光被表面漫反射的量度。
 			surface.Smoothness =_Smoothness; //平滑度
 		}
 		ENDCG //表面著色器的子著色器需要使用 CG 和 HLSL 這兩種著色器語言混合編寫的代碼部分。
